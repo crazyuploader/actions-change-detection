@@ -1,0 +1,42 @@
+{
+  "status": "ok",
+  "details": {
+    "ip_address": "1.1.1.1",
+    "city": null,
+    "city_geoname_id": null,
+    "region": null,
+    "region_iso_code": null,
+    "region_geoname_id": null,
+    "postal_code": null,
+    "country": null,
+    "country_code": null,
+    "country_geoname_id": null,
+    "country_is_eu": false,
+    "continent": null,
+    "continent_code": null,
+    "continent_geoname_id": null,
+    "longitude": null,
+    "latitude": null,
+    "security": {
+      "is_vpn": false
+    },
+    "timezone": {
+      "name": "",
+      "abbreviation": "",
+      "gmt_offset": "",
+      "current_time": "",
+      "is_dst": ""
+    },
+    "flag": null,
+    "currency": null,
+    "connection": {
+      "autonomous_system_number": 13335,
+      "autonomous_system_organization": "CLOUDFLARENET",
+      "connection_type": null,
+      "isp_name": null,
+      "organization_name": null
+    }
+  },
+  "query_url": "https://api.devjugal.com/ip-info?ip=1.1.1.1",
+  "execution_time": "1.09 seconds"
+}
