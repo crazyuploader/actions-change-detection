@@ -21,7 +21,7 @@ jobs:
           filter: "*.json"
 
       - name: All
-        run: echo ${{steps.files.outputs.all}} | jq
+        run: echo "${{ steps.files.outputs.all }}" | jq
 
       - name: Added files
-        run: echo ${{steps.files.output.added}} | jq
+        run: echo "${{ steps.files.outputs.added }}" | jq
