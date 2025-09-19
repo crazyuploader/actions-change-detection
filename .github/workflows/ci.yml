@@ -21,8 +21,8 @@ jobs:
           format: "json"
           filter: "*.json"
 
-      - name: All
-        run: echo ${{ steps.files.outputs.all }} | jq
-
-      - name: Added files
-        run: echo ${{ steps.files.outputs.added }} | jq
+      - run: |
+          readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
+          for file in "${added_files[@]}"; do
+            echo "File added: $file"
+          done
