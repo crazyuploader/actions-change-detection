@@ -24,7 +24,7 @@
       "name": "America/Chicago",
       "abbreviation": "CDT",
       "gmt_offset": -5,
-      "current_time": "09:44:35",
+      "current_time": "09:51:42",
       "is_dst": true
     },
     "flag": {
@@ -46,5 +46,5 @@
     }
   },
   "query_url": "https://api.devjugal.com/ip-info?ip=198.169.1.1",
-  "execution_time": "1.21 seconds"
+  "execution_time": "0.94 seconds"
 }
