@@ -37,6 +37,7 @@ jobs:
 
       - name: Find existing issue
         id: find-issue
+        if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
         run: |
           # Search for existing issue with the specific title pattern
           ISSUE_NUMBER=$(gh issue list --search "JSON File Changes in PR #${{ github.event.pull_request.number }}" --json number --jq '.[0].number // empty')
@@ -45,6 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate issue content file
+        if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
         run: |
           echo "# JSON File Changes in Pull Request #${{ github.event.pull_request.number }}" > issue_content.md
           echo "" >> issue_content.md
@@ -53,15 +55,12 @@ jobs:
 
           echo "## Added Files:" >> issue_content.md
           readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
-          if [ ${#added_files[@]} -eq 0 ]; then
-            echo "- No files added." >> issue_content.md
-          else
-            for file in "${added_files[@]}"; do
-              echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
-            done
-          fi
+          for file in "${added_files[@]}"; do
+            echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
+          done
 
       - name: Create or update issue from file
+        if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
         uses: peter-evans/create-issue-from-file@v5
         with:
           issue-number: ${{ steps.find-issue.outputs.existing-issue }}
