@@ -21,14 +21,58 @@ jobs:
           format: "json"
           filter: "*.json"
 
-      - run: |
+      - name: List added files
+        run: |
+          readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
+          if [ ${#added_files[@]} -eq 0 ]; then
+            echo "No added files."
+          else
+            echo "Added files:"
+            for file in "${added_files[@]}"; do
+              echo "- $file"
+            done
+          fi
+
+      - name: List modified files
+        run: |
+          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
+          if [ ${#modified_files[@]} -eq 0 ]; then
+            echo "No modified files."
+          else
+            echo "Modified files:"
+            for file in "${modified_files[@]}"; do
+              echo "- $file"
+            done
+          fi
+
+      - name: Generate issue content file
+        run: |
+          echo "# New JSON Files Added" > issue_content.md
+          echo "" >> issue_content.md
+          echo "The following JSON files were added in this ${GITHUB_EVENT_NAME}:" >> issue_content.md
+          echo "" >> issue_content.md
           readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
           for file in "${added_files[@]}"; do
-            echo "File added: $file"
+            echo "- $file" >> issue_content.md
           done
 
-      - run: |
-          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
-          for file in "${modified_files[@]}"; do
-            echo "File modified: $file"
-          done
+      - name: Create issue from file
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: "New JSON files added"
+          content-filepath: ./issue_content.md
+          labels: |
+            report
+            automated issue
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on the PR with added files
+        if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            :rocket: JSON files added in this PR:
+
+            ${{ steps.files.outputs.added }}
