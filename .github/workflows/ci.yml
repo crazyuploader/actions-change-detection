@@ -49,19 +49,36 @@ jobs:
 
       - name: Generate issue content file
         run: |
-          echo "# New JSON Files Added" > issue_content.md
+          echo "# JSON File Changes in Pull Request #{{ github.event.pull_request.number }}" > issue_content.md
           echo "" >> issue_content.md
-          echo "The following JSON files were added in this ${GITHUB_EVENT_NAME}:" >> issue_content.md
+          echo "This pull request introduces the following changes to JSON files:" >> issue_content.md
           echo "" >> issue_content.md
-          readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
-          for file in "${added_files[@]}"; do
-            echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
-          done
 
-      - name: Create issue from file
+          echo "## Added Files:" >> issue_content.md
+          readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
+          if [ ${#added_files[@]} -eq 0 ]; then
+            echo "- No files added." >> issue_content.md
+          else
+            for file in "${added_files[@]}"; do
+              echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
+            done
+          fi
+          echo "" >> issue_content.md
+
+          echo "## Modified Files:" >> issue_content.md
+          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
+          if [ ${#modified_files[@]} -eq 0 ]; then
+            echo "- No files modified." >> issue_content.md
+          else
+            for file in "${modified_files[@]}"; do
+              echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
+            done
+          fi
+
+      - name: Create or update issue from file
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: "New JSON files added"
+          title: "JSON File Changes in PR #{{ github.event.pull_request.number }}"
           content-filepath: ./issue_content.md
           labels: |
             report
