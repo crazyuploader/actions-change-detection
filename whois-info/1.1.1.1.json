@@ -38,5 +38,5 @@
     }
   },
   "query_url": "https://api.devjugal.com/ip-info?ip=1.1.1.1",
-  "execution_time": "1.09 seconds"
+  "execution_time": "1.17 seconds"
 }
