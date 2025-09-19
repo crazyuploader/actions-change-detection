@@ -35,18 +35,6 @@ jobs:
             done
           fi
 
-      - name: List modified files
-        run: |
-          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
-          if [ ${#modified_files[@]} -eq 0 ]; then
-            echo "No modified files."
-          else
-            echo "Modified files:"
-            for file in "${modified_files[@]}"; do
-              echo "- $file"
-            done
-          fi
-
       - name: Find existing issue
         id: find-issue
         run: |
@@ -69,17 +57,6 @@ jobs:
             echo "- No files added." >> issue_content.md
           else
             for file in "${added_files[@]}"; do
-              echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
-            done
-          fi
-          echo "" >> issue_content.md
-
-          echo "## Modified Files:" >> issue_content.md
-          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
-          if [ ${#modified_files[@]} -eq 0 ]; then
-            echo "- No files modified." >> issue_content.md
-          else
-            for file in "${modified_files[@]}"; do
               echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
             done
           fi
