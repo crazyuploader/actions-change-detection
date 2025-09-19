@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "details": {
+    "ip_address": "2001:4860:4860::8888",
+    "city": null,
+    "city_geoname_id": null,
+    "region": null,
+    "region_iso_code": null,
+    "region_geoname_id": null,
+    "postal_code": null,
+    "country": "United States",
+    "country_code": "US",
+    "country_geoname_id": 6252001,
+    "country_is_eu": false,
+    "continent": "North America",
+    "continent_code": "NA",
+    "continent_geoname_id": 6255149,
+    "longitude": -97.822,
+    "latitude": 37.751,
+    "security": {
+      "is_vpn": false
+    },
+    "timezone": {
+      "name": "America/Chicago",
+      "abbreviation": "CDT",
+      "gmt_offset": -5,
+      "current_time": "04:41:04",
+      "is_dst": true
+    },
+    "flag": {
+      "emoji": "🇺🇸",
+      "unicode": "U+1F1FA U+1F1F8",
+      "png": "https://static.abstractapi.com/country-flags/US_flag.png",
+      "svg": "https://static.abstractapi.com/country-flags/US_flag.svg"
+    },
+    "currency": {
+      "currency_name": "USD",
+      "currency_code": "USD"
+    },
+    "connection": {
+      "autonomous_system_number": 15169,
+      "autonomous_system_organization": "GOOGLE",
+      "connection_type": null,
+      "isp_name": null,
+      "organization_name": null
+    }
+  },
+  "query_url": "https://api.devjugal.com/ip-info?ip=2001:4860:4860::8888",
+  "execution_time": "1.07 seconds"
+}
