@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "details": {
+    "ip_address": "1.2.3.4",
+    "city": null,
+    "city_geoname_id": null,
+    "region": null,
+    "region_iso_code": null,
+    "region_geoname_id": null,
+    "postal_code": null,
+    "country": "Australia",
+    "country_code": "AU",
+    "country_geoname_id": 2077456,
+    "country_is_eu": false,
+    "continent": "Oceania",
+    "continent_code": "OC",
+    "continent_geoname_id": 6255151,
+    "longitude": 143.2104,
+    "latitude": -33.494,
+    "security": {
+      "is_vpn": true
+    },
+    "timezone": {
+      "name": "Australia/Sydney",
+      "abbreviation": "AEST",
+      "gmt_offset": 10,
+      "current_time": "19:33:46",
+      "is_dst": false
+    },
+    "flag": {
+      "emoji": "🇦🇺",
+      "unicode": "U+1F1E6 U+1F1FA",
+      "png": "https://static.abstractapi.com/country-flags/AU_flag.png",
+      "svg": "https://static.abstractapi.com/country-flags/AU_flag.svg"
+    },
+    "currency": {
+      "currency_name": "Australian Dollars",
+      "currency_code": "AUD"
+    },
+    "connection": {
+      "autonomous_system_number": null,
+      "autonomous_system_organization": null,
+      "connection_type": null,
+      "isp_name": null,
+      "organization_name": null
+    }
+  },
+  "query_url": "https://api.devjugal.com/ip-info?ip=1.2.3.4",
+  "execution_time": "1.13 seconds"
+}
