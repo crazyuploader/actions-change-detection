@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout dashboards repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
 
       - uses: Ana06/get-changed-files@v2.3.0
         with:
