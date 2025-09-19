@@ -65,7 +65,7 @@ jobs:
 
       - name: Comment on the PR with added files
         if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
-        uses: peter-evans/create-or-update-comment@v2
+        uses: peter-evans/create-or-update-comment@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.pull_request.number }}
