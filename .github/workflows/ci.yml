@@ -73,10 +73,15 @@ jobs:
         if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
         run: |
           files=$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')
-          comment=":rocket: JSON files added in this PR:\n\n"
+          comment=":rocket: JSON files added in this PR:
+
+          "
+
           for file in $files; do
-            comment+="- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})\n"
+            comment+="- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})
+          "
           done
+
           gh pr comment ${{ github.event.pull_request.number }} --body "$comment"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
