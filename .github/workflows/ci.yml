@@ -4,9 +4,6 @@ on:
   pull_request:
     paths:
       - "**/*.json"
-  push:
-    paths:
-      - "**/*.json"
 
 jobs:
   create-issue:
