@@ -47,9 +47,18 @@ jobs:
             done
           fi
 
+      - name: Find existing issue
+        id: find-issue
+        run: |
+          # Search for existing issue with the specific title pattern
+          ISSUE_NUMBER=$(gh issue list --search "JSON File Changes in PR #${{ github.event.pull_request.number }}" --json number --jq '.[0].number // empty')
+          echo "existing-issue=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate issue content file
         run: |
-          echo "# JSON File Changes in Pull Request #{{ github.event.pull_request.number }}" > issue_content.md
+          echo "# JSON File Changes in Pull Request #${{ github.event.pull_request.number }}" > issue_content.md
           echo "" >> issue_content.md
           echo "This pull request introduces the following changes to JSON files:" >> issue_content.md
           echo "" >> issue_content.md
@@ -78,7 +87,8 @@ jobs:
       - name: Create or update issue from file
         uses: peter-evans/create-issue-from-file@v5
         with:
-          title: "JSON File Changes in PR #{{ github.event.pull_request.number }}"
+          issue-number: ${{ steps.find-issue.outputs.existing-issue }}
+          title: "JSON File Changes in PR #${{ github.event.pull_request.number }}"
           content-filepath: ./issue_content.md
           labels: |
             report
