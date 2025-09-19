@@ -24,7 +24,7 @@
       "name": "Asia/Kolkata",
       "abbreviation": "IST",
       "gmt_offset": 5,
-      "current_time": "14:06:04",
+      "current_time": "14:23:52",
       "is_dst": false
     },
     "flag": {
@@ -46,5 +46,5 @@
     }
   },
   "query_url": "https://api.devjugal.com/ip-info?ip=163.61.39.60",
-  "execution_time": "1.21 seconds"
+  "execution_time": "1.1 seconds"
 }
