@@ -26,3 +26,9 @@ jobs:
           for file in "${added_files[@]}"; do
             echo "File added: $file"
           done
+
+      - run: |
+          readarray -t modified_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.modified }}')"
+          for file in "${modified_files[@]}"; do
+            echo "File modified: $file"
+          done
