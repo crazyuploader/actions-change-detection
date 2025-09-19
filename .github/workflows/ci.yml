@@ -55,7 +55,7 @@ jobs:
           echo "" >> issue_content.md
           readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
           for file in "${added_files[@]}"; do
-            echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/${file})" >> issue_content.md
+            echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})" >> issue_content.md
           done
 
       - name: Create issue from file
