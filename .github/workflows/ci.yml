@@ -55,7 +55,7 @@ jobs:
           echo "" >> issue_content.md
           readarray -t added_files <<<"$(jq -r '.[]' <<< '${{ steps.files.outputs.added }}')"
           for file in "${added_files[@]}"; do
-            echo "- $file" >> issue_content.md
+            echo "- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/${file})" >> issue_content.md
           done
 
       - name: Create issue from file
@@ -70,11 +70,12 @@ jobs:
 
       - name: Comment on the PR with added files
         if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: |
-            :rocket: JSON files added in this PR:
-
-            ${{ steps.files.outputs.added }}
+        run: |
+          files=$((jq -r '.[]' <<< '${{ steps.files.outputs.added }}'))
+          comment=":rocket: JSON files added in this PR:\n\n"
+          for file in $files; do
+            comment+="- [${file}](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/${file})\n"
+          done
+          gh pr comment ${{ github.event.pull_request.number }} --body "$comment"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
