@@ -66,6 +66,7 @@ jobs:
           labels: |
             report
             automated issue
+          assignees: crazyuploader
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Comment on the PR with added files
