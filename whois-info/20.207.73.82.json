@@ -1,0 +1,50 @@
+{
+  "status": "ok",
+  "details": {
+    "ip_address": "20.207.73.82",
+    "city": "Pune",
+    "city_geoname_id": 1259229,
+    "region": "Maharashtra",
+    "region_iso_code": "MH",
+    "region_geoname_id": 1264418,
+    "postal_code": "411005",
+    "country": "India",
+    "country_code": "IN",
+    "country_geoname_id": 1269750,
+    "country_is_eu": false,
+    "continent": "Asia",
+    "continent_code": "AS",
+    "continent_geoname_id": 6255147,
+    "longitude": 73.8502,
+    "latitude": 18.5211,
+    "security": {
+      "is_vpn": true
+    },
+    "timezone": {
+      "name": "Asia/Kolkata",
+      "abbreviation": "IST",
+      "gmt_offset": 5,
+      "current_time": "15:31:31",
+      "is_dst": false
+    },
+    "flag": {
+      "emoji": "🇮🇳",
+      "unicode": "U+1F1EE U+1F1F3",
+      "png": "https://static.abstractapi.com/country-flags/IN_flag.png",
+      "svg": "https://static.abstractapi.com/country-flags/IN_flag.svg"
+    },
+    "currency": {
+      "currency_name": "Indian Rupee",
+      "currency_code": "INR"
+    },
+    "connection": {
+      "autonomous_system_number": 8075,
+      "autonomous_system_organization": "MICROSOFT-CORP-MSN-AS-BLOCK",
+      "connection_type": null,
+      "isp_name": null,
+      "organization_name": null
+    }
+  },
+  "query_url": "https://api.devjugal.com/ip-info?ip=20.207.73.82",
+  "execution_time": "1.05 seconds"
+}
