@@ -1,13 +1,13 @@
 {
   "status": "ok",
   "details": {
-    "ip_address": "198.169.1.1",
-    "city": null,
-    "city_geoname_id": null,
-    "region": null,
-    "region_iso_code": null,
-    "region_geoname_id": null,
-    "postal_code": null,
+    "ip_address": "9.9.9.9",
+    "city": "Berkeley",
+    "city_geoname_id": 5327684,
+    "region": "California",
+    "region_iso_code": "CA",
+    "region_geoname_id": 5332921,
+    "postal_code": "94709",
     "country": "United States",
     "country_code": "US",
     "country_geoname_id": 6252001,
@@ -15,16 +15,16 @@
     "continent": "North America",
     "continent_code": "NA",
     "continent_geoname_id": 6255149,
-    "longitude": -97.822,
-    "latitude": 37.751,
+    "longitude": -122.2676,
+    "latitude": 37.8767,
     "security": {
-      "is_vpn": true
+      "is_vpn": false
     },
     "timezone": {
-      "name": "America/Chicago",
-      "abbreviation": "CDT",
-      "gmt_offset": -5,
-      "current_time": "09:51:42",
+      "name": "America/Los_Angeles",
+      "abbreviation": "PDT",
+      "gmt_offset": -7,
+      "current_time": "07:52:49",
       "is_dst": true
     },
     "flag": {
@@ -38,13 +38,13 @@
       "currency_code": "USD"
     },
     "connection": {
-      "autonomous_system_number": 16509,
-      "autonomous_system_organization": "AMAZON-02",
+      "autonomous_system_number": 19281,
+      "autonomous_system_organization": "QUAD9-AS-1",
       "connection_type": null,
       "isp_name": null,
       "organization_name": null
     }
   },
-  "query_url": "https://api.devjugal.com/ip-info?ip=198.169.1.1",
-  "execution_time": "0.94 seconds"
+  "query_url": "https://api.devjugal.com/ip-info?ip=9.9.9.9",
+  "execution_time": "1.14 seconds"
 }
