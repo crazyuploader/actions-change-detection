@@ -61,7 +61,7 @@ jobs:
 
       - name: Create or update issue from file
         if: steps.files.outputs.added != '[]' && steps.files.outputs.added != ''
-        uses: peter-evans/create-issue-from-file@v5
+        uses: peter-evans/create-issue-from-file@v6
         with:
           issue-number: ${{ steps.find-issue.outputs.existing-issue }}
           title: "JSON File Changes in PR #${{ github.event.pull_request.number }}"
