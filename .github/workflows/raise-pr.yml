@@ -1,0 +1,162 @@
+name: Create Issue in Repo B for JSON Changes
+
+on:
+  pull_request:
+    paths:
+      - "**/*.json"
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  create-cross-repo-issue:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed JSON files
+        id: changed-files
+        uses: tj-actions/changed-files@v44
+        with:
+          files: |
+            **/*.json
+
+      - name: List added JSON files
+        if: steps.changed-files.outputs.added_files != ''
+        run: |
+          echo "Added JSON files:"
+          echo "${{ steps.changed-files.outputs.added_files }}"
+
+      - name: Find existing issue in Repo B
+        id: find-issue
+        if: steps.changed-files.outputs.added_files != ''
+        run: |
+          # Search for existing issue in repo B
+          ISSUE_NUMBER=$(gh issue list \
+            --repo ${{ vars.TARGET_REPO_OWNER }}/${{ vars.TARGET_REPO_NAME }} \
+            --search "JSON File Changes in PR #${{ github.event.pull_request.number }} in:title" \
+            --json number \
+            --jq '.[0].number // empty')
+          
+          echo "existing-issue=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+          
+          if [ -n "$ISSUE_NUMBER" ]; then
+            echo "Found existing issue #$ISSUE_NUMBER in target repo"
+          else
+            echo "No existing issue found in target repo"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.CROSS_REPO_TOKEN }}
+
+      - name: Generate issue content
+        id: issue-content
+        if: steps.changed-files.outputs.added_files != ''
+        run: |
+          # Create issue body
+          {
+            echo "# JSON File Changes in Pull Request"
+            echo ""
+            echo "**Source Repository:** ${{ github.repository }}"
+            echo "**Pull Request:** [#${{ github.event.pull_request.number }}](${{ github.event.pull_request.html_url }})"
+            echo "**Branch:** \`${{ github.head_ref }}\`"
+            echo "**Author:** @${{ github.event.pull_request.user.login }}"
+            echo ""
+            echo "## Added JSON Files:"
+            echo ""
+            
+            # Process each added file
+            for file in ${{ steps.changed-files.outputs.added_files }}; do
+              file_url="https://github.com/${{ github.repository }}/blob/${{ github.event.pull_request.head.sha }}/${file}"
+              echo "- [\`${file}\`](${file_url})"
+            done
+            
+            echo ""
+            echo "---"
+            echo "*This issue was automatically created by the [Create Issue workflow](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*"
+          } > issue_content.md
+          
+          cat issue_content.md
+
+      - name: Create or update issue in Repo B
+        if: steps.changed-files.outputs.added_files != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.CROSS_REPO_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const issueBody = fs.readFileSync('issue_content.md', 'utf8');
+            const existingIssue = '${{ steps.find-issue.outputs.existing-issue }}';
+            const targetOwner = '${{ vars.TARGET_REPO_OWNER }}';
+            const targetRepo = '${{ vars.TARGET_REPO_NAME }}';
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: targetOwner,
+                repo: targetRepo,
+                issue_number: parseInt(existingIssue),
+                body: issueBody
+              });
+              console.log(`Updated issue #${existingIssue} in ${targetOwner}/${targetRepo}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: targetOwner,
+                repo: targetRepo,
+                title: `JSON File Changes in PR #${{ github.event.pull_request.number }} from ${{ github.repository }}`,
+                body: issueBody,
+                labels: ['automated-issue', 'json-changes'],
+                assignees: ['${{ vars.ISSUE_ASSIGNEE }}']
+              });
+              console.log(`Created issue #${issue.data.number} in ${targetOwner}/${targetRepo}`);
+            }
+
+      - name: Delete previous bot comments
+        if: always() && steps.changed-files.outputs.added_files != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+            
+            for (const comment of comments.data) {
+              if (comment.user.type === 'Bot' && comment.body.includes('JSON files added in this PR')) {
+                await github.rest.issues.deleteComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id
+                });
+              }
+            }
+
+      - name: Comment on PR
+        if: steps.changed-files.outputs.added_files != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = '${{ steps.changed-files.outputs.added_files }}'.split(' ');
+            
+            let comment = `## 🚀 JSON files added in this PR\n\n`;
+            
+            for (const file of files) {
+              const fileUrl = `https://github.com/${{ github.repository }}/blob/${{ github.event.pull_request.head.sha }}/${file}`;
+              comment += `- [\`${file}\`](${fileUrl})\n`;
+            }
+            
+            comment += `\n📋 An issue has been created in [\`${{ vars.TARGET_REPO_OWNER }}/${{ vars.TARGET_REPO_NAME }}\`](https://github.com/${{ vars.TARGET_REPO_OWNER }}/${{ vars.TARGET_REPO_NAME }}/issues) to track these changes.`;
+            
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
