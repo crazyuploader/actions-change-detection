@@ -128,7 +128,7 @@ jobs:
 
       - name: Create or update issue in signoz.io
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           github-token: ${{ secrets.CROSS_REPO_TOKEN }}
           script: |
@@ -162,7 +162,7 @@ jobs:
 
       - name: Delete previous bot comments
         if: always() && steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const comments = await github.rest.issues.listComments({
@@ -183,7 +183,7 @@ jobs:
 
       - name: Comment on PR
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const files = '${{ steps.changed-files.outputs.added_files }}'.split(' ');
