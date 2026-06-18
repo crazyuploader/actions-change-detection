@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout dashboards repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
 
       - uses: Ana06/get-changed-files@v2.3.0
         id: files
